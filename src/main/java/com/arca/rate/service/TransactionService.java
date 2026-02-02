@@ -12,8 +12,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.time.YearMonth;
+import java.time.ZoneOffset;
 import java.util.List;
 
 @Service
@@ -46,8 +48,8 @@ public class TransactionService {
     }
 
     public List<TransactionWithLimitResponse> getExceededTransactionsByMonth(YearMonth yearMonth) {
-        OffsetDateTime start = OffsetDateTime.from(yearMonth.atDay(0));
-        OffsetDateTime end = OffsetDateTime.from(yearMonth.atEndOfMonth());
+        OffsetDateTime start = OffsetDateTime.from(yearMonth.atDay(1).atStartOfDay(ZoneOffset.UTC));
+        OffsetDateTime end = OffsetDateTime.from(yearMonth.atEndOfMonth().atTime(LocalTime.MAX).atOffset(ZoneOffset.UTC));
         return processExceededTransactions(transactionRepository.findExceededByPeriodWithLimitDetails(start, end));
     }
 
