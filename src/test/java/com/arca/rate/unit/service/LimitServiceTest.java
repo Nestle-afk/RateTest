@@ -1,5 +1,8 @@
 package com.arca.rate.unit.service;
 
+import com.arca.rate.dto.request.LimitCreateRequest;
+import com.arca.rate.dto.response.LimitResponse;
+import com.arca.rate.mapper.LimitMapper;
 import com.arca.rate.model.ExpenseCategory;
 import com.arca.rate.model.Limit;
 import com.arca.rate.repository.LimitRepository;
@@ -19,6 +22,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -29,6 +33,9 @@ class LimitServiceTest {
 
     @InjectMocks
     private LimitService limitService;
+
+    @Mock
+    private LimitMapper limitMapper;
 
     private Limit limit;
 
@@ -60,5 +67,37 @@ class LimitServiceTest {
 
         assertNotNull(result);
         assertEquals(new BigDecimal("1000.00"), result.getLimitSum());
+    }
+
+    @Test
+    void createNewLimit_validRequest_createsAndReturnsResponse() {
+        LimitCreateRequest request = new LimitCreateRequest();
+        request.setExpenseCategory(ExpenseCategory.PRODUCT);
+        request.setLimitSum(new BigDecimal("2000.00"));
+
+        Limit savedLimit = new Limit();
+        savedLimit.setId(2L);
+        savedLimit.setLimitSum(new BigDecimal("2000.00"));
+
+        when(limitRepository.save(any(Limit.class))).thenReturn(savedLimit);
+        when(limitMapper.toLimitResponse(savedLimit)).thenReturn(new LimitResponse());
+
+        LimitResponse result = limitService.createNewLimit(request);
+
+        assertNotNull(result);
+        verify(limitRepository).save(any(Limit.class));
+        verify(limitMapper).toLimitResponse(savedLimit);
+    }
+
+    @Test
+    void save_callsRepositorySave() {
+        Limit limitToSave = new Limit();
+        limitToSave.setId(1L);
+        when(limitRepository.save(limitToSave)).thenReturn(limitToSave);
+
+        Limit result = limitService.save(limitToSave);
+
+        assertNotNull(result);
+        verify(limitRepository).save(limitToSave);
     }
 }

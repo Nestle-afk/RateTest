@@ -29,7 +29,11 @@
 2. Настройте базы данных:
    ```bash
    docker-compose up -d
-   ```
+   docker cp src/main/resources/db/cassandra/V1__create_keyspace.cql cassandra:/tmp/
+   docker cp src/main/resources/db/cassandra/V2__create_currency_rate_table.cql cassandra:/tmp/
+   docker exec cassandra cqlsh -f /tmp/V1__create_keyspace.cql
+   docker exec cassandra cqlsh -f /tmp/V2__create_currency_rate_table.cql
+   ``` 
 
 3. Соберите и запустите приложение:
    ```bash

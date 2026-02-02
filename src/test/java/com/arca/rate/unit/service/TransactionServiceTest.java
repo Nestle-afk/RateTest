@@ -21,12 +21,9 @@ import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class TransactionServiceTest {
@@ -81,5 +78,24 @@ class TransactionServiceTest {
 
         assertFalse(transaction.isLimitExceeded());
         assertEquals(new BigDecimal("900.00"), limit.getRemainingSum());
+    }
+
+    @Test
+    void testProcessTransaction_LimitExceeded_NoLimitUpdate() {
+        limit.setRemainingSum(new BigDecimal("50.00"));
+
+        when(currencyRateService.convertToUsd(any(BigDecimal.class), any(String.class), any())).thenReturn(Mono.just(new BigDecimal("100.00")));
+        when(limitService.getActiveLimit(any(ExpenseCategory.class), any(OffsetDateTime.class))).thenReturn(limit);
+        when(transactionMapper.toEntity(any(TransactionCreateRequest.class), any(BigDecimal.class), eq(true)))
+                .thenAnswer(invocation -> {
+                    transaction.setLimitExceeded(true);
+                    return transaction;
+                });
+
+        transactionService.processTransaction(request);
+
+        assertTrue(transaction.isLimitExceeded());
+        verify(limitService, never()).save(any(Limit.class));
+        verify(transactionRepository).save(transaction);
     }
 }
