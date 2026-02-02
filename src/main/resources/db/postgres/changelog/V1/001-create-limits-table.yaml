@@ -1,0 +1,56 @@
+databaseChangeLog:
+  - changeSet:
+      id: 001-create-limits-table
+      author: arca
+      changes:
+        - createTable:
+            tableName: limits
+            columns:
+              - column:
+                  name: id
+                  type: BIGSERIAL
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+
+              - column:
+                  name: limit_sum
+                  type: NUMERIC(15,2)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: remaining_sum
+                  type: NUMERIC(15,2)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: created_at
+                  type: TIMESTAMPTZ
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: currency_shortname
+                  type: VARCHAR(3)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: expense_category
+                  type: VARCHAR(10)
+                  constraints:
+                    nullable: false
+
+        - sql:
+            sql: |
+              ALTER TABLE limits 
+              ADD CONSTRAINT chk_limits_expense_category 
+              CHECK (expense_category IN ('PRODUCT', 'SERVICE'))
+
+        - sql:
+            sql: |
+              ALTER TABLE limits 
+              ADD CONSTRAINT chk_limits_currency 
+              CHECK (currency_shortname = 'USD')

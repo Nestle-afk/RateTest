@@ -1,0 +1,27 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5433/rate
+    username: rate_user
+    password: rate_password
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: true
+  liquibase:
+    enabled: true
+    change-log: classpath:db/postgres/changelog/db.changelog-master.yaml
+    contexts: dev,test
+  cassandra:
+    contact-points: localhost
+    port: 9042
+    keyspace-name: exchange_rates
+    local-datacenter: datacenter1
+    schema-action: none
+
+alphavantage:
+  api:
+    key: O8FN582ZNRQWUDID

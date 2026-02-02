@@ -1,0 +1,26 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:16
+    container_name: rate-postgres
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_DB: rate
+      POSTGRES_USER: rate_user
+      POSTGRES_PASSWORD: rate_password
+    volumes:
+      - pg:/var/lib/postgresql/data
+
+  cassandra:
+    image: cassandra:4.1
+    container_name: cassandra
+    ports:
+      - "9042:9042"
+    environment:
+      CASSANDRA_CLUSTER_NAME: "limit-cluster"
+      CASSANDRA_DC: dc1
+
+volumes:
+  pg:

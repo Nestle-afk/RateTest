@@ -1,0 +1,29 @@
+databaseChangeLog:
+  - changeSet:
+      id: 002-insert-transactions-test-data
+      author: arca
+      context: dev,test
+      changes:
+        - insert:
+            tableName: transactions
+            columns:
+              - column: { name: account_from, value: "0000000123" }
+              - column: { name: account_to, value: "9999999999" }
+              - column: { name: currency_shortname, value: "KZT" }
+              - column: { name: sum, valueNumeric: 500.0 }
+              - column: { name: sum_usd, valueNumeric: 500.0 }
+              - column: { name: expense_category, value: "PRODUCT" }
+              - column: { name: datetime, valueDate: "2022-01-02 10:00:00" }
+              - column: { name: limit_exceeded, valueBoolean: false }
+
+        - insert:
+            tableName: transactions
+            columns:
+              - column: { name: account_from, value: "0000000123" }
+              - column: { name: account_to, value: "9999999999" }
+              - column: { name: currency_shortname, value: "RUB" }
+              - column: { name: sum, valueNumeric: 600.00 }
+              - column: { name: sum_usd, valueNumeric: 600.00 }
+              - column: { name: expense_category, value: "SERVICE" }
+              - column: { name: datetime, valueDate: "2022-01-03 10:00:00" }
+              - column: { name: limit_exceeded, valueBoolean: true }
