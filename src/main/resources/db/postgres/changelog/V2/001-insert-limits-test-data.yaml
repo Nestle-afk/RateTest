@@ -1,0 +1,23 @@
+databaseChangeLog:
+  - changeSet:
+      id: 001-insert-limits-test-data
+      author: arca
+      context: dev,test
+      changes:
+        - insert:
+            tableName: limits
+            columns:
+              - column: { name: limit_sum, valueNumeric: 1500.00 }
+              - column: { name: remaining_sum, valueNumeric: 1500.00 }
+              - column: { name: created_at, valueDate: "2026-01-01 00:00:00" }
+              - column: { name: currency_shortname, value: "USD" }
+              - column: { name: expense_category, value: "PRODUCT" }
+
+        - insert:
+            tableName: limits
+            columns:
+              - column: { name: limit_sum, valueNumeric: 1000.00 }
+              - column: { name: remaining_sum, valueNumeric: 1000.00 }
+              - column: { name: created_at, valueDate: "2026-01-01 00:00:00" }
+              - column: { name: currency_shortname, value: "USD" }
+              - column: { name: expense_category, value: "SERVICE" }

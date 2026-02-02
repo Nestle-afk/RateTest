@@ -1,0 +1,22 @@
+spring:
+  datasource:
+    url: ${POSTGRES_URL:jdbc:postgresql://localhost:5433/rate}
+    username: ${POSTGRES_USERNAME:rate_user}
+    password: ${POSTGRES_PASSWORD:rate_password}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+  liquibase:
+    contexts: test
+
+  cassandra:
+    contact-points: ${CASSANDRA_CONTACT_POINTS:cassandra}
+    port: ${CASSANDRA_PORT:9042}
+    keyspace-name: exchange_rates
+    local-datacenter: datacenter1
+    schema-action: none
+
+alphavantage:
+  api:
+    key: demo

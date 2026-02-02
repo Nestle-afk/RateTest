@@ -1,0 +1,18 @@
+databaseChangeLog:
+  - changeSet:
+      id: 003-create-indexes
+      author: arca
+      changes:
+        - createIndex:
+            tableName: transactions
+            indexName: idx_transactions_limit_exceeded
+            columns:
+              - column:
+                  name: limit_exceeded
+
+        - createIndex:
+            tableName: transactions
+            indexName: idx_transactions_limit_id
+            columns:
+              - column:
+                  name: limit_id

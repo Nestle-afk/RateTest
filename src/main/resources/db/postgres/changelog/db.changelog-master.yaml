@@ -1,0 +1,15 @@
+databaseChangeLog:
+  - include:
+      file: db/postgres/changelog/V1/001-create-limits-table.yaml
+
+  - include:
+      file: db/postgres/changelog/V1/002-create-transactions-table.yaml
+
+  - include:
+      file: db/postgres/changelog/V1/003-create-indexes.yaml
+
+  - include:
+      file: db/postgres/changelog/V2/001-insert-limits-test-data.yaml
+
+  - include:
+      file: db/postgres/changelog/V2/002-insert-transactions-test-data.yaml
