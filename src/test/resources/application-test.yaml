@@ -9,8 +9,9 @@ spring:
     show-sql: false
   liquibase:
     contexts: test
+
   cassandra:
-    contact-points: ${CASSANDRA_CONTACT_POINTS:localhost}
+    contact-points: ${CASSANDRA_CONTACT_POINTS:cassandra}
     port: ${CASSANDRA_PORT:9042}
     keyspace-name: exchange_rates
     local-datacenter: datacenter1
@@ -18,4 +19,4 @@ spring:
 
 alphavantage:
   api:
-    key: demo  # Для тестов используем демо-ключ
+    key: demo

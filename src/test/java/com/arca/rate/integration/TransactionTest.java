@@ -13,6 +13,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.springframework.http.HttpStatus;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.TestPropertySource;
 import org.testcontainers.containers.CassandraContainer;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
@@ -27,6 +29,8 @@ import static org.springframework.http.HttpStatus.*;
 
 @Testcontainers
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@ActiveProfiles("test")
+@TestPropertySource(properties = "alphavantage.api.key=demo")
 class TransactionTest {
 
     @Container
@@ -38,7 +42,8 @@ class TransactionTest {
 
     @Container
     @ServiceConnection
-    static CassandraContainer<?> cassandra = new CassandraContainer<>("cassandra:4.1");
+    static CassandraContainer<?> cassandra = new CassandraContainer<>("cassandra:4.1")
+            .withInitScript("init-cassandra.cql");;
 
     @Autowired
     private TestRestTemplate restTemplate;

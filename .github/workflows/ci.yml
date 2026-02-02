@@ -22,11 +22,11 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      - name: Build (compile + test compile)
+      - name: Build and Test Compile
         run: mvn clean compile test-compile --batch-mode
 
       - name: Run Tests
-        run: mvn test --batch-mode
+        run: mvn test --batch-mode -Dspring.profiles.active=test
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@v2
