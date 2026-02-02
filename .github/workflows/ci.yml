@@ -22,8 +22,11 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      - name: Build and test with Maven
-        run: mvn clean verify --batch-mode
+      - name: Build (compile + test compile)
+        run: mvn clean compile test-compile --batch-mode
+
+      - name: Run Tests
+        run: mvn test --batch-mode
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@v2
